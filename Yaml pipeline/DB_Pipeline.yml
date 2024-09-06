@@ -1,0 +1,22 @@
+trigger:
+  branches:
+    include:
+    - dev
+stages:
+- stage: __default
+  jobs:
+  - job: Job
+    pool:
+      vmImage: windows-latest
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: 'HBS_EcoMobile/HBS_EcoMobile.csproj'
+        arguments: '--output $(Build.BinariesDirectory)/publish_output --configuration Release'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.BinariesDirectory)/publish_output'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
